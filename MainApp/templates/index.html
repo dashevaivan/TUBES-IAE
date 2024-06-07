@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Menu</title>
+</head>
+
+<body>
+
+    <div>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ url_for('payment') }}">Selected Item</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1 style="margin-top: 25px; margin-bottom: 25px; margin-left: 65px;">Menu</h1>
+        <div class="row">
+            {% for item in menu %}
+            <div class="col-md-4 mb-4">
+                <div class="card" style="width: 18rem; align-items: center; margin-left: 67px;">
+                    <img src="{{item.gambar}}" class="card-img-top" alt="..." style="width: 18rem; height: 13rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.nama }}</h5>
+                        <p class="card-text">{{ item.deskripsi }}</p>
+                        <p class="card-text">Rp{{ item.harga }}</p>
+                        <a href="{{ url_for('order', id=item.id) }}" class="btn btn-dark order-button"
+                            data-item-name="{{ item.nama }}">Select Item</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('payment')}}" class="btn btn-dark" style="margin-left: 65px; margin-top: 15px;">See Selected
+            Items</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.order-button').forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault(); // Mencegah navigasi otomatis
+
+                var itemName = this.dataset.itemName;
+                Swal.fire({
+                    title: itemName + ' Akan Ditambahkan ke Pesanan',
+                    icon: 'info',
+                    showCancelButton: true, // Menampilkan tombol cancel
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = this.getAttribute('href');
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
